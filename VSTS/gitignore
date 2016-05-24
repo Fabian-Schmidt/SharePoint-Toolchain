@@ -1,0 +1,15 @@
+#external dependencies
+bower_components
+node_modules
+typings
+
+#build artefacts
+lib
+release
+tools
+*.nupkg
+
+#local settings
+dev.*
+.vscode
+*.log
