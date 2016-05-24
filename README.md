@@ -97,8 +97,8 @@ The gulp script will:
 As source control system Visual Studio Team Services is used. 
 * Create a new project with Git version control.
 * Upload the files from the subfolder [VSTS](VSTS/). Rename 'gitignore' to '.gitignore'.
-* Setup Team build
- * ![Create new build definition](img/VSTS-NewBuildDefinition.png?raw=true)
+* Setup Team build<br />
+ ![Create new build definition](img/VSTS-NewBuildDefinition.png?raw=true)
  * Choose an empty template.
  * Activate 'Continuous integration'.
  * Click 'Create'.
@@ -106,7 +106,7 @@ As source control system Visual Studio Team Services is used.
  * Auto deploy to a SharePoint Online Showcase instance.
  * Release via VSTS Release manager to a package repository.
  * Add Variables
- 
+
 | Name | Value | Secret |
 | --- | --- | --- |
 | system.debug | false | |
@@ -139,8 +139,8 @@ Recommendation:
   * Run the build. There must be at least one extension present in the repository. This will create the output artefacts.
 
 
- * Setup Package Feed
-  * ![Create new Feed](img/VSTS-NewFeed.png?raw=true)
+ * Setup Package Feed<br />
+ ![Create new Feed](img/VSTS-NewFeed.png?raw=true)
   * Open Package extension
   * Click New Feed
   
@@ -177,8 +177,8 @@ RegisterPackageSource.ps1 <- Scrip to register feed.
 
 Initial setup steps:
  * Adjust your feed url in the ```DeployPackage.ps1``` and ```RegisterPackageSource.ps1```
- * Create Feed Credentials
- * ![Create Feed Credentials](img/VSTS-FeedCredentials.png?raw=true)
+ * Create Feed Credentials<br />
+ ![Create Feed Credentials](img/VSTS-FeedCredentials.png?raw=true)
  * Run ```RegisterPackageSource.ps1``` and provide the Feed Credentials.
  
 Package deployment steps:
