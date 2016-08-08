@@ -13,12 +13,12 @@ Prerequisite:
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [TypeScript](https://www.typescriptlang.org/)
 * [NodeJS](https://nodejs.org/)
- * [NPM](https://www.npmjs.com/)
- * [Gulp](http://gulpjs.com/)
- * [Bower](http://bower.io/)
- * [Typings](https://github.com/typings/typings)
- * [Yeoman](http://yeoman.io/)
- * [TypeScript](https://www.npmjs.com/package/typescript)
+   * [NPM](https://www.npmjs.com/)
+   * [Gulp](http://gulpjs.com/)
+   * [webpack module bundler](https://webpack.github.io/)
+   * [Typings](https://github.com/typings/typings)
+   * [Yeoman](http://yeoman.io/)
+   * [TypeScript](https://www.npmjs.com/package/typescript)
 * SharePoint Online instance for development
 * [Visual Studio Team Serivces](https://www.visualstudio.com/products/visual-studio-team-services-vs)
  * [VSTS Package Management Extension](https://marketplace.visualstudio.com/items?itemName=ms.feed)
@@ -30,23 +30,30 @@ The toolchain requires the source control to have the following structre:
  / <- Git root
  /dev.* <- Local development settings. Excluded from source control.
  /*.ps1 <- Scripts for team build. See subfolder VSTS for example.
+ /SharePointPnPPowerShellOnline/ <- Folder of SharePoint PnP PowerShell module. Used by team built for staging deployment. 
  /<Extension name>/gulpfile.js <- Script for automation tasks. 
- /<Extension name>/package.json <- Node definition. Reference to used packages. Contains version number.
+ /<Extension name>/package.json <- NodeJS definition. Reference to used packages. Contains version number.
  /<Extension name>/package.nuspec <- NuGet package definition.
+ /<Extension name>/webpack.config.js <- Configuration of WebPack.
  /<Extension name>/NuGet_lib/* <- Additional helper libraries for NuGet deployment. Default empty.
  /<Extension name>/NuGet_tools/install.ps1 <- The install script of the extension on customer SharePoint instance.
  /<Extension name>/src/* <- Source code of the extension.
  /<Extension name>/src/index.html <- The start of the web part.
- /<Extension name>/src/showteammembers.dwp <- The web part definition file.
+ /<Extension name>/src/<Extension name>.dwp <- The web part definition file.
  /<Extension name>/src/assets/* <- Artefacts used by extension (images).
- /<Extension name>/src/js/extension.ts <- The typescript code of the extension.
+ /<Extension name>/src/js/index.tsx <- The typescript code of the extension.
 ```
 All extensions are within one git repository. And each extension has his own folder.
 
 ## Setup dev machine
 The steps required to setup a developer machine.
 * Install prerequisite.
+   * [Visual Studio Code](https://code.visualstudio.com/)
+   * [TypeScript](https://www.typescriptlang.org/)
+   * [NodeJS](https://nodejs.org/)
+   * ``` npm install -g gulp typings yo webpack```
 * Create file ```/dev.json``` with local development settings.
+
 > Example: 
 ```
 {
@@ -58,10 +65,10 @@ The steps required to setup a developer machine.
 ```
 See [gulp-sharepoint-sync](https://github.com/Fabian-Schmidt/gulp-sharepoint-sync) for how to setup authentication.
 Recommendation:
->* Use ACS auth with Client Id and Client Secret.
->* Use seperate site collection for each developer.
-* Create self sign certificate for localhost in ```/dev.pfx```. Add the certificate to the trust of the machine.
-> This cert is used for the live reloading on change.   
+* Use ACS auth with Client Id and Client Secret to SharePoint Online (Office 365).
+* Use seperate site collection for each developer.
+* Create self sign certificate for localhost in ```/dev.ca.crt```, ```/dev.server.crt``` and ```/dev.server.key```. Add the certificate to the trust of the machine.
+   * Example: https://github.com/webpack/webpack-dev-server/tree/master/ssl
 
 ## Development cycle
 * Yeoman (Node JS - templating tool) to create project based on template.
@@ -135,7 +142,7 @@ Recommendation:
      * Artifact Name: ```Nuget```
      * Artifact Type: ```Server```
     6. PowerShell 03-Deploy Artefacts to Staging.ps1
-     * Arguments: ```-spSync_ClientSecret $(spSync_ClientSecret)```
+     * Arguments: ```-spSync_SiteCollectionUrl $(spSync_SiteCollectionUrl) -spSync_ClientId $(spSync_ClientId) -spSync_ClientSecret $(spSync_ClientSecret)```
   * Run the build. There must be at least one extension present in the repository. This will create the output artefacts.
 
 
@@ -172,7 +179,7 @@ In consists of
 CredMan.ps1 <- Used to store credentials secure.
 DeployPackage.ps1 <- Script to deploy package from feed.
 nuget.exe <- Required, because Windows Package Managmenent contains currently a bug.
-RegisterPackageSource.ps1 <- Scrip to register feed.
+RegisterPackageSource.ps1 <- Script to register feed.
 ```
 
 Initial setup steps:
